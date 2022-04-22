@@ -10,13 +10,11 @@ border-radius: 20px;
 height: 100%;
 
 button{
-
 }
 
 img{
     max-height: 250px;
     object-fit: cover;
-
 }
 
 div {
