@@ -8,6 +8,7 @@ import Badge from "@material-ui/core/Badge";
 import Cart from './Cart/Cart';
 import { Wrapper, StyledButton } from "./App.styles";
 import Item from "./Item/item";
+import { PersonalVideo } from "@material-ui/icons";
 
 export type CartItemType = {
   id: number;
@@ -34,8 +35,33 @@ const App = () => {
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
-  const handleAddToCart = (item: CartItemType) => null;
-  const handleRemoveFromCart = (id: number) => null;
+
+  const handleAddToCart = (clickedItem: CartItemType) => {
+    setCartItems(prev => {
+      const isItemInCart = prev?.find(item => item.id === clickedItem.id);
+      if(isItemInCart){
+        return prev?.map(item => 
+          item.id === clickedItem.id ? {...item, amount:item.amount +1} : item
+    
+        )
+      }
+      return[ ...prev,{...clickedItem, amount:1}]
+
+    });
+  };
+
+  const handleRemoveFromCart = (id: number) => {
+    setCartItems(prev => (
+      prev.reduce((ack, item) => {
+        if(item.id === id){
+          if(item.amount === 1)return ack;
+          return [...ack, {...item,amount: item.amount -1}]
+        } else{
+          return [...ack, item]
+        }
+      }, [] as CartItemType[])
+    ))
+  };
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>something went wrong</div>;
